@@ -5,8 +5,8 @@ on:
     branches:
       - main
 
-permissions: 
-  pages: write
+permissions:
+  contents: write
 
 jobs:
   deploy:
