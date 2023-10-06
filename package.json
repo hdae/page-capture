@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/themes": "^2.0.0",
+    "@types/node": "^20.8.2",
+    "jotai": "^2.4.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "ress": "^5.0.2"
