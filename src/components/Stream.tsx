@@ -1,21 +1,41 @@
 import { useStream } from "@/hooks/stream"
-import { fullscreenAtom } from "@/misc/store"
+import { aspectAtom, fullscreenAtom } from "@/misc/store"
 import { MediaDeviceObj } from "@/misc/types"
 import { makeConstraint } from "@/utils/constraint"
-import { useAtom } from "jotai"
+import { useAtom, useAtomValue } from "jotai"
 import { useMemo } from "react"
+
+export type ConstraintOptions = Omit<MediaTrackConstraintSet, "deviceId" | "groupId">
 
 export type StreamProps = {
     device: MediaDeviceObj
 }
 
+const defaultOption = {
+    autoGainControl: false,
+    echoCancellation: false,
+    noiseSuppression: false,
+}
+
 export const Stream = ({ device }: StreamProps) => {
     const [videoRef, setStream] = useStream()
+    const aspectRatio = useAtomValue(aspectAtom)
     const [fullscreen, setFullscreen] = useAtom(fullscreenAtom)
 
-    useMemo(() => navigator.mediaDevices
-        .getUserMedia(makeConstraint(device))
-        .then(setStream), [device])
+    useMemo(
+        () => navigator.mediaDevices
+            .getUserMedia(
+                makeConstraint(
+                    device,
+                    {
+                        ...defaultOption,
+                        aspectRatio,
+                    }
+                )
+            )
+            .then(setStream),
+        [device, aspectRatio]
+    )
 
     if (videoRef.current !== null && fullscreen) {
         videoRef.current.requestFullscreen()
