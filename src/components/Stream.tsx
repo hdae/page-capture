@@ -15,11 +15,13 @@ const defaultOption = {
     autoGainControl: false,
     echoCancellation: false,
     noiseSuppression: false,
+    width: { min: 0, max: 3840 },
+    height: { min: 0, max: 2160 },
 }
 
 export const Stream = ({ device }: StreamProps) => {
     const [videoRef, setStream] = useStream()
-    const aspectRatio = useAtomValue(aspectAtom)
+    const aspect = useAtomValue(aspectAtom)
     const [fullscreen, setFullscreen] = useAtom(fullscreenAtom)
 
     useMemo(
@@ -29,12 +31,12 @@ export const Stream = ({ device }: StreamProps) => {
                     device,
                     {
                         ...defaultOption,
-                        aspectRatio,
+                        aspectRatio: { exact: aspect },
                     }
                 )
             )
             .then(setStream),
-        [device, aspectRatio]
+        [device, aspect]
     )
 
     if (videoRef.current !== null && fullscreen) {
