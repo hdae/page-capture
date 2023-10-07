@@ -3,8 +3,10 @@ import { Select } from "@radix-ui/themes"
 import { useSetAtom } from "jotai"
 
 const aspects = {
+    "auto": undefined,
     "16:9": 16 / 9,
     "4:3": 4 / 3,
+    "3:2": 3 / 2,
 }
 
 export const Aspects = () => {
