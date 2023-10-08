@@ -12,12 +12,10 @@ export type StreamProps = {
     device: MediaDeviceObj
 }
 
-const defaultOption = {
+const defaultOption: MediaTrackConstraints = {
     autoGainControl: false,
     echoCancellation: false,
     noiseSuppression: false,
-    width: { min: 0, max: 3840 },
-    height: { min: 0, max: 2160 },
 }
 
 const getWidth = (resolution?: number, aspect?: number) =>
@@ -41,8 +39,16 @@ export const Stream = ({ device }: StreamProps) => {
                     {
                         ...defaultOption,
                         aspectRatio: { exact: aspect },
-                        width: { exact: getWidth(resolution, aspect) },
-                        height: { exact: resolution }
+                        width: {
+                            min: 0,
+                            max: 3840,
+                            ideal: getWidth(resolution, aspect),
+                        },
+                        height: {
+                            min: 0,
+                            max: 2160,
+                            ideal: resolution,
+                        },
                     }
                 )
             )
