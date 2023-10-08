@@ -6,6 +6,7 @@ import { App } from "@/App.tsx"
 import { Box, Theme } from "@radix-ui/themes"
 import { ReactNode, StrictMode } from "react"
 import { createRoot } from "react-dom/client"
+import { Toaster } from "react-hot-toast"
 
 const root = document.getElementById("root")
 if (root === null) throw new Error("Failed to initialize application.")
@@ -35,5 +36,6 @@ createRoot(root).render(
                 <App />
             </Box>
         </ThemeProvider>
+        <Toaster />
     </StrictMode>
 )

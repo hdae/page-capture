@@ -3,6 +3,7 @@ import { Stream } from "@/components/Stream"
 import { Button, Card, Flex, useThemeContext } from "@radix-ui/themes"
 import { useAtomValue, useSetAtom } from "jotai"
 import { Aspects } from "./components/Aspect"
+import { Resolutions } from "./components/Resolution"
 import { deviceAtom, fullscreenAtom } from "./misc/store"
 
 export function App() {
@@ -27,6 +28,7 @@ export function App() {
                 <Flex gap="2" direction="row">
                     <Devices />
                     <Aspects />
+                    <Resolutions />
                     <Button onClick={() => {
                         if (device !== undefined) {
                             setFullscreen(value => !value)

@@ -1,9 +1,10 @@
 import { useStream } from "@/hooks/stream"
-import { aspectAtom, fullscreenAtom } from "@/misc/store"
+import { aspectAtom, fullscreenAtom, resolutionAtom } from "@/misc/store"
 import { MediaDeviceObj } from "@/misc/types"
 import { makeConstraint } from "@/utils/constraint"
 import { useAtom, useAtomValue } from "jotai"
 import { useMemo } from "react"
+import toast from "react-hot-toast"
 
 export type ConstraintOptions = Omit<MediaTrackConstraintSet, "deviceId" | "groupId">
 
@@ -19,10 +20,18 @@ const defaultOption = {
     height: { min: 0, max: 2160 },
 }
 
+const getWidth = (resolution?: number, aspect?: number) =>
+    resolution === undefined || aspect === undefined
+        ? undefined
+        : Math.round(resolution * aspect)
+
 export const Stream = ({ device }: StreamProps) => {
     const [videoRef, setStream] = useStream()
     const aspect = useAtomValue(aspectAtom)
+    const resolution = useAtomValue(resolutionAtom)
     const [fullscreen, setFullscreen] = useAtom(fullscreenAtom)
+
+    console.log(resolution)
 
     useMemo(
         () => navigator.mediaDevices
@@ -32,11 +41,17 @@ export const Stream = ({ device }: StreamProps) => {
                     {
                         ...defaultOption,
                         aspectRatio: { exact: aspect },
+                        width: { exact: getWidth(resolution, aspect) },
+                        height: { exact: resolution }
                     }
                 )
             )
-            .then(setStream),
-        [device, aspect]
+            .then(setStream)
+            .catch(() => {
+                console.log({ aspect, resolution })
+                toast.error("Failed to set resolution.")
+            }),
+        [device, aspect, resolution]
     )
 
     if (videoRef.current !== null && fullscreen) {
